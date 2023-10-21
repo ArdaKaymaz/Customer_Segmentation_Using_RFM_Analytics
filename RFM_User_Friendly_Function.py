@@ -2,8 +2,7 @@
 # Only works on current dataset structure.
 import pandas as pd
 import datetime as dt
-
-pd.set_option("display.max_columns", None)
+pd.set_option("display.max_columns", 14)
 pd.set_option("display.width", 500)
 
 _df_ = pd.read_csv("data_20k.csv")
@@ -13,6 +12,23 @@ today_date = dt.datetime(2021, 6, 1)
 
 
 def main_func(dataframe):
+    """
+
+    Parameters
+    ----------
+    dataframe: specify relevant dataframe.
+
+    Returns
+    Returns as three questions:
+        1. Segment name
+            (For a single segment, enter the segment name as is. For multiple segments, list the segment names separated by '|' (pipe character).)
+        2. Category name
+            (For a single category, enter the category name as is. For multiple categories, list the category names separated by '|' (pipe character).)
+        3. CSV file name
+    After answering these question, function will return as a .csv file that created by the answers.
+    -------
+
+    """
     def prep_data(dataframe):
         dataframe["omni_total_order"] = dataframe["order_num_total_ever_online"] + dataframe["order_num_total_ever_offline"]
         dataframe["omni_customer_value"] = dataframe["customer_value_total_ever_offline"] + dataframe[

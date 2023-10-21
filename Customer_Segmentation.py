@@ -25,7 +25,7 @@
 
 import datetime as dt
 import pandas as pd
-pd.set_option("display.max_columns", None)
+pd.set_option("display.max_columns", 14)
 pd.set_option('display.width', 99)
 pd.set_option("display.float_format", lambda x: "%.3f" % x)
 
@@ -39,7 +39,6 @@ df.shape
 df.dtypes
 df.columns
 df.describe().T
-df.describe(percentiles=[0.01, 0.25, 0.50, 0.75, 0.90, 0.95, 0.99, 0.999]).T
 df.isnull().sum()
 
 # Step 3: Creating new variables in the dataset for using Omnichannel for shopping. This way we will be able
@@ -50,16 +49,9 @@ df["omni_total_order"] = df["order_num_total_ever_online"] + df["order_num_total
 df.head()
 
 
-# Step 4: Examination of variable types and converting variables that represent dates to the type datetime. We have 2 different ways to do this.
+# Step 4: Examination of variable types and converting variables that represent dates to the type datetime.
 
 df.dtypes
-
-df["first_order_date"] = pd.to_datetime(df["first_order_date"])
-df["last_order_date"] = pd.to_datetime(df["last_order_date"])
-df["last_order_date_online"] = pd.to_datetime(df["last_order_date_online"])
-df["last_order_date_offline"] = pd.to_datetime(df["last_order_date_offline"])
-
-# or #
 
 for col in df.columns:
     if "date" in col:
@@ -97,10 +89,9 @@ df_top_ten_order = df.sort_values(by="omni_total_order", ascending=False).head(1
 def data_preparation(dataframe):
     dataframe["omni_customer_value"] = dataframe["customer_value_total_ever_online"] + dataframe["customer_value_total_ever_offline"]
     dataframe["omni_total_order"] = dataframe["order_num_total_ever_online"] + dataframe["order_num_total_ever_offline"]
-    dataframe["first_order_date"] = pd.to_datetime(dataframe["first_order_date"])
-    dataframe["last_order_date"] = pd.to_datetime(dataframe["last_order_date"])
-    dataframe["last_order_date_online"] = pd.to_datetime(dataframe["last_order_date_online"])
-    dataframe["last_order_date_offline"] = pd.to_datetime(dataframe["last_order_date_offline"])
+    for col in dataframe.columns:
+        if "date" in col:
+            df[col] = pd.to_datetime(dataframe[col])
     return dataframe
 
 data_preparation(df) # to call it.
@@ -179,9 +170,9 @@ rfm["Segment"] = rfm["RF_score"].replace(seg_map, regex=True)
 rfm.head()
 
 
-########################
-### Task 5: Action ! ###
-########################
+###################################
+### Task 5: RFM Use In Practice ###
+###################################
 
 # Step 1: Examine and evaluate the averages of recency, frequency, and monetary for the segments.
 
